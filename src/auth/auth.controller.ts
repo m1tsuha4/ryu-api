@@ -24,7 +24,7 @@ export class AuthController {
     description: 'Login User',
     schema: {
       example: {
-        email: 'admin@tekiro.com',
+        email: 'admin@ryu.com',
         password: 'StrongPassword123!',
       },
     },

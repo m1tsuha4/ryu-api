@@ -28,9 +28,9 @@ export class UserController {
     description: 'Create a new user',
     schema: {
       example: {
-        email: 'admin@tekiro.com',
+        email: 'admin@ryu.com',
         password: 'StrongPassword123!',
-        name: 'Admin Tekiro',
+        name: 'Admin Ryu',
       },
     },
   })
@@ -73,9 +73,9 @@ export class UserController {
     description: 'Update a user',
     schema: {
       example: {
-        email: 'admin@tekiro.com',
+        email: 'admin@ryu.com',
         password: 'StrongPassword123!',
-        name: 'Admin Tekiro',
+        name: 'Admin Ryu',
       },
     },
   })
