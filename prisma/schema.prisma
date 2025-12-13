@@ -35,7 +35,7 @@ model TokenBlacklist {
 
 model Category {
   id          String     @id @default(cuid())
-  name        String     
+  name        String
   slug        String     @unique
   imageUrl    String?
   description String?
@@ -47,6 +47,7 @@ model Category {
   deletedAt   DateTime?
 
   productCateogry ProductCategory[]
+
   @@unique([name, parentId])
 }
 
@@ -54,14 +55,14 @@ model Product {
   id          String    @id @default(cuid())
   name        String
   slug        String    @unique
-  description String    @db.Text
-  storeUrl    String
+  description String?   @db.Text
+  storeUrl    String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
 
   productCategory ProductCategory[]
-  poductImages    ProductImage[]
+  productImages   ProductImage[]
 }
 
 model ProductImage {

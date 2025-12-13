@@ -80,6 +80,21 @@ export class CategoryController {
   @ApiConsumes('multipart/form-data')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        name: { type: 'string' },
+        slug: { type: 'string' },
+        description: { type: 'string' },
+        parentId: { type: 'string' },
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
   @Patch(':id')
   update(
     @Param('id') id: string,
