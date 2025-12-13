@@ -48,7 +48,7 @@ export class ProductController {
           items: {
             type: 'string',
             format: 'binary',
-          }
+          },
         },
       },
       required: ['name'],

@@ -27,11 +27,10 @@ export class ProductService {
       );
     }
 
-    const rawCategoryIds:unknown = createProductDto.categoryIds;
-    const categoryIds =
-      Array.isArray(rawCategoryIds)
-        ? rawCategoryIds
-        : typeof rawCategoryIds === 'string'
+    const rawCategoryIds: unknown = createProductDto.categoryIds;
+    const categoryIds = Array.isArray(rawCategoryIds)
+      ? rawCategoryIds
+      : typeof rawCategoryIds === 'string'
         ? rawCategoryIds.split(',').map((id) => id.trim())
         : [];
     return this.prisma.$transaction(async (tx) => {
@@ -102,7 +101,7 @@ export class ProductService {
           },
         },
       },
-    })
+    });
   }
 
   async findOne(id: string) {
@@ -193,12 +192,11 @@ export class ProductService {
         });
       }
 
-      const rawCategoryIds:unknown = updateProductDto.categoryIds;
+      const rawCategoryIds: unknown = updateProductDto.categoryIds;
 
-      const categoryIds =
-        Array.isArray(rawCategoryIds)
-          ? rawCategoryIds
-          : typeof rawCategoryIds === 'string'
+      const categoryIds = Array.isArray(rawCategoryIds)
+        ? rawCategoryIds
+        : typeof rawCategoryIds === 'string'
           ? rawCategoryIds.split(',').map((id) => id.trim())
           : [];
 

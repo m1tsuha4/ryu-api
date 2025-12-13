@@ -8,11 +8,14 @@ import { existsSync, unlinkSync } from 'fs';
 @Injectable()
 export class CatalogueService {
   constructor(private readonly prisma: PrismaService) {}
-  async create(createCatalogueDto: CreateCatalogueDto, file: Express.Multer.File) {
+  async create(
+    createCatalogueDto: CreateCatalogueDto,
+    file: Express.Multer.File,
+  ) {
     if (!file) {
       throw new BadRequestException('Catalogue PDF file is required');
     }
-    
+
     return this.prisma.catalogue.create({
       data: {
         title: createCatalogueDto.title,
@@ -22,13 +25,24 @@ export class CatalogueService {
   }
 
   async findAll() {
-    const existingCatalogues = this.prisma.catalogue.findMany();
+    const existingCatalogues = this.prisma.catalogue.findMany({
+      select: {
+        id: true,
+        title: true,
+        fileUrl: true,
+      },
+    });
     return existingCatalogues;
   }
 
   async findOne(id: string) {
     const existingCatalogue = this.prisma.catalogue.findUnique({
       where: { id: id },
+      select: {
+        id: true,
+        title: true,
+        fileUrl: true,
+      },
     });
     if (!existingCatalogue) {
       throw new BadRequestException('Catalogue not found');
@@ -36,10 +50,14 @@ export class CatalogueService {
     return existingCatalogue;
   }
 
-  async update(id: string, updateCatalogueDto: UpdateCatalogueDto, file?: Express.Multer.File) {
+  async update(
+    id: string,
+    updateCatalogueDto: UpdateCatalogueDto,
+    file?: Express.Multer.File,
+  ) {
     const existingCatalogue = await this.prisma.catalogue.findUnique({
       where: { id: id },
-    })
+    });
     if (!existingCatalogue) {
       throw new BadRequestException('Catalogue not found');
     }
@@ -93,5 +111,5 @@ export class CatalogueService {
     return this.prisma.catalogue.delete({
       where: { id: id },
     });
-  } 
+  }
 }

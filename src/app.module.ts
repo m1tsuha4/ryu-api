@@ -10,6 +10,7 @@ import { TransformResponseInterceptor } from './common/interceptors/transform-re
 import { CategoryModule } from './category/category.module';
 import { ProductModule } from './product/product.module';
 import { CatalogueModule } from './catalogue/catalogue.module';
+import { ServiceCenterModule } from './service-center/service-center.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { CatalogueModule } from './catalogue/catalogue.module';
     CategoryModule,
     ProductModule,
     CatalogueModule,
+    ServiceCenterModule,
   ],
   controllers: [AppController],
   providers: [

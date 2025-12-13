@@ -7,14 +7,11 @@ export const CreateProductSchema = z.object({
   description: z.string().max(1000),
   storeUrl: z.string().url(),
   categoryIds: z
-    .preprocess(
-      (val) => {
-        if (Array.isArray(val)) return val;
-        if (typeof val === 'string') return [val];
-        return [];
-      },
-      z.array(z.string().cuid()),
-    )
+    .preprocess((val) => {
+      if (Array.isArray(val)) return val;
+      if (typeof val === 'string') return [val];
+      return [];
+    }, z.array(z.string().cuid()))
     .optional(),
 });
 
