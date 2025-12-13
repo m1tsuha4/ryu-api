@@ -104,6 +104,29 @@ export class ProductService {
     });
   }
 
+  async search(query: string) {
+    return this.prisma.product.findMany({
+      where: {
+        deletedAt: null,
+        name: {
+          contains: query,
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        description: true,
+        storeUrl: true,
+        productImages: {
+          select: {
+            url: true,
+          },
+        },
+      },
+    });
+  }
+
   async findOne(id: string) {
     const product = await this.prisma.product.findUnique({
       where: {

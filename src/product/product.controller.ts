@@ -73,6 +73,11 @@ export class ProductController {
     return this.productService.findLatest();
   }
 
+  @Get('search/:query')
+  search(@Param('query') query: string) {
+    return this.productService.search(query);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.productService.findOne(id);
