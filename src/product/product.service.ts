@@ -81,6 +81,30 @@ export class ProductService {
     });
   }
 
+  async findLatest() {
+    return this.prisma.product.findMany({
+      where: {
+        deletedAt: null,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: 6,
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        description: true,
+        storeUrl: true,
+        productImages: {
+          select: {
+            url: true,
+          },
+        },
+      },
+    })
+  }
+
   async findOne(id: string) {
     const product = await this.prisma.product.findUnique({
       where: {

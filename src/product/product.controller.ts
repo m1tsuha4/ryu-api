@@ -68,6 +68,11 @@ export class ProductController {
     return this.productService.findAll();
   }
 
+  @Get('latest')
+  findLatest() {
+    return this.productService.findLatest();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.productService.findOne(id);
