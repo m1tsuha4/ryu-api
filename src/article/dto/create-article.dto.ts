@@ -9,7 +9,10 @@ export const CreateArticleSchmea = z.object({
   primaryImage: z.string().optional(),
   seoTitle: z.string().optional(),
   seoDescription: z.string().optional(),
-  metaTags: z.string().optional().transform((val) => (val ? JSON.parse(val) : undefined)),
+  metaTags: z
+    .string()
+    .optional()
+    .transform((val) => (val ? JSON.parse(val) : undefined)),
   author: z.string().optional(),
   status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).optional(),
   publishedAt: z.date().optional(),

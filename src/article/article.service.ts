@@ -25,10 +25,13 @@ export class ArticleService {
 
     const primaryImage = file ? `/uploads/article/${file.filename}` : null;
 
-    let metaTags:any = undefined;
-    if(createArticleDto.metaTags) {
+    let metaTags: any = undefined;
+    if (createArticleDto.metaTags) {
       try {
-        metaTags = typeof createArticleDto.metaTags === 'string' ? JSON.parse(createArticleDto.metaTags) : createArticleDto.metaTags;
+        metaTags =
+          typeof createArticleDto.metaTags === 'string'
+            ? JSON.parse(createArticleDto.metaTags)
+            : createArticleDto.metaTags;
       } catch (error) {
         throw new BadRequestException('Invalid metaTags');
       }
