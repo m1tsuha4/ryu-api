@@ -73,6 +73,11 @@ export class ProductController {
     return this.productService.findLatest();
   }
 
+  @Get('category/:categoryId')
+  findByCategory(@Param('categoryId') categoryId: string) {
+    return this.productService.getProductByCategoryId(categoryId);
+  }
+
   @Get('search/:query')
   search(@Param('query') query: string) {
     return this.productService.search(query);

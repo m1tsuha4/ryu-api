@@ -71,6 +71,16 @@ export class ProductService {
         slug: true,
         description: true,
         storeUrl: true,
+        productCategory: {
+          select: {
+            categoryId: true,
+            category: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
         productImages: {
           select: {
             url: true,
@@ -95,6 +105,16 @@ export class ProductService {
         slug: true,
         description: true,
         storeUrl: true,
+        productCategory: {
+          select: {
+            categoryId: true,
+            category: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
         productImages: {
           select: {
             url: true,
@@ -118,6 +138,16 @@ export class ProductService {
         slug: true,
         description: true,
         storeUrl: true,
+        productCategory: {
+          select: {
+            categoryId: true,
+            category: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
         productImages: {
           select: {
             url: true,
@@ -138,6 +168,109 @@ export class ProductService {
       throw new BadRequestException('Product not found');
     }
     return product;
+  }
+
+  async findOneBySlug(slug: string) {
+    const product = await this.prisma.product.findUnique({
+      where: {
+        slug,
+        deletedAt: null,
+      },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        description: true,
+        storeUrl: true,
+        productCategory: {
+          select: {
+            categoryId: true,
+            category: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+        productImages: {
+          select: {
+            url: true,
+          },
+        },
+      },
+    });
+    if (!product) {
+      throw new BadRequestException('Product not found');
+    }
+    return product;
+  }
+
+  async getCategoryAndChildrenIds(categoryId: string): Promise<string[]> {
+    const categories = await this.prisma.category.findMany({
+      where: { deletedAt: null },
+      select: { id: true, parentId: true },
+    });
+
+    const result: string[] = [];
+
+    function walk(id: string) {
+      result.push(id);
+
+      categories.filter((c) => c.parentId === id).forEach((c) => walk(c.id));
+    }
+
+    walk(categoryId);
+    return result;
+  }
+
+  async getProductByCategoryId(categoryId: string) {
+    const category = await this.prisma.category.findFirst({
+      where: {
+        id: categoryId,
+        deletedAt: null,
+      },
+    });
+
+    if (!category) {
+      throw new BadRequestException('Category not found');
+    }
+
+    const ids = await this.getCategoryAndChildrenIds(category.id);
+
+    return this.prisma.product.findMany({
+      where: {
+        deletedAt: null,
+        productCategory: {
+          some: {
+            categoryId: {
+              in: ids,
+            },
+          },
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        description: true,
+        storeUrl: true,
+        productCategory: {
+          select: {
+            categoryId: true,
+            category: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+        productImages: {
+          select: {
+            url: true,
+          },
+        },
+      },
+    });
   }
 
   async update(
