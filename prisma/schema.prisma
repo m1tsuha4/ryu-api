@@ -96,7 +96,7 @@ model Article {
   seoTitle       String?
   seoDescription String?
   metaTags       Json?
-  author         String
+  author         String?
   status         ArticleStatus @default(PUBLISHED)
   publishedAt    DateTime?
   createdAt      DateTime      @default(now())

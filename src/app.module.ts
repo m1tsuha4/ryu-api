@@ -11,6 +11,7 @@ import { CategoryModule } from './category/category.module';
 import { ProductModule } from './product/product.module';
 import { CatalogueModule } from './catalogue/catalogue.module';
 import { ServiceCenterModule } from './service-center/service-center.module';
+import { ArticleModule } from './article/article.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { ServiceCenterModule } from './service-center/service-center.module';
     ProductModule,
     CatalogueModule,
     ServiceCenterModule,
+    ArticleModule,
   ],
   controllers: [AppController],
   providers: [
