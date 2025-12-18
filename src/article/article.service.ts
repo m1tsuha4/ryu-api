@@ -181,6 +181,19 @@ export class ArticleService {
       throw new BadRequestException('Article not found');
     }
 
+    const uploadRoot = join(process.cwd(), 'uploads');
+    if (existingArticle.primaryImage && existingArticle.primaryImage.length > 0) {
+      const filename = basename(existingArticle.primaryImage);
+      const filePath = join(uploadRoot, 'article', filename);
+      try {
+        if (existsSync(filePath)) {
+          unlinkSync(filePath);
+        }
+      } catch (error) {
+        console.error('Error deleting old article file:', error);
+      }
+    }
+
     return this.prisma.article.update({
       where: {
         id,
@@ -195,6 +208,37 @@ export class ArticleService {
     return this.prisma.imageArticle.create({
       data: {
         url: `/uploads/image-article/${file.filename}`,
+      },
+    });
+  }
+
+  async removeImageArticle(id: string) {
+    const existingImageArticle = await this.prisma.imageArticle.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!existingImageArticle) {
+      throw new BadRequestException('Image article not found');
+    }
+
+    const uploadRoot = join(process.cwd(), 'uploads');
+    if (existingImageArticle.url && existingImageArticle.url.length > 0) {
+      const filename = basename(existingImageArticle.url);
+      const filePath = join(uploadRoot, 'image-article', filename);
+      try {
+        if (existsSync(filePath)) {
+          unlinkSync(filePath);
+        }
+      } catch (error) {
+        console.error('Error deleting old image article file:', error);
+      }
+    }
+
+    return this.prisma.imageArticle.delete({
+      where: {
+        id,
       },
     });
   }

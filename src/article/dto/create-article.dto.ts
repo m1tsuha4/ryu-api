@@ -15,7 +15,7 @@ export const CreateArticleSchmea = z.object({
     .transform((val) => (val ? JSON.parse(val) : undefined)),
   author: z.string().optional(),
   status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).optional(),
-  publishedAt: z.date().optional(),
+  publishedAt: z.coerce.date().optional(),
 });
 
 export class CreateArticleDto extends createZodDto(CreateArticleSchmea) {}

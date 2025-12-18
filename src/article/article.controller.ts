@@ -32,19 +32,25 @@ export class ArticleController {
     schema: {
       type: 'object',
       properties: {
-        title: { type: 'string' },
-        excerpt: { type: 'string' },
-        contentHtml: { type: 'string' },
+        title: { type: 'string', example: 'Power Tools Andal untuk Pekerjaan dan Kebutuhan Sehari-hari - RYU'},
+        excerpt: { type: 'string', example: 'Power Tools Andal untuk Pekerjaan dan Kebutuhan Sehari-hari - RYU' },
+        contentHtml: { type: 'string', example: '<p>Power Tools Andal untuk Pekerjaan dan Kebutuhan Sehari-hari - RYU</p>' },
         file: {
           type: 'string',
           format: 'binary',
         },
-        seoTitle: { type: 'string' },
-        seoDescription: { type: 'string' },
-        metaTags: { type: 'string' },
-        author: { type: 'string' },
-        status: { type: 'string' },
-        publishedAt: { type: 'string' },
+        seoTitle: { type: 'string', example: 'Power Tools Andal untuk Pekerjaan dan Kebutuhan Sehari-hari - RYU' },
+        seoDescription: { type: 'string', example: 'Power Tools Andal untuk Pekerjaan dan Kebutuhan Sehari-hari - RYU' },
+        metaTags: { type: 'object', example: 
+          {
+            title: 'Power Tools Andal untuk Pekerjaan dan Kebutuhan Sehari-hari - RYU',
+            description: 'Power Tools Andal untuk Pekerjaan dan Kebutuhan Sehari-hari - RYU',
+            keywords: 'Power Tools'
+          }
+        },
+        author: { type: 'string', example: 'RYU' },
+        status: { type: 'string', example: 'PUBLISHED' },
+        publishedAt: { type: 'date', example: '2025-12-18T08:02:45.000Z' },
       },
     },
   })
@@ -94,10 +100,10 @@ export class ArticleController {
         },
         seoTitle: { type: 'string' },
         seoDescription: { type: 'string' },
-        metaTags: { type: 'string' },
+        metaTags: { type: 'object' },
         author: { type: 'string' },
         status: { type: 'string' },
-        publishedAt: { type: 'string' },
+        publishedAt: { type: 'date' },
       },
     },
   })
@@ -135,5 +141,12 @@ export class ArticleController {
   @Post('upload-image')
   uploadImage(@UploadedFile() file: Express.Multer.File) {
     return this.articleService.uploadImage(file);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Delete('image-article/:id')
+  removeImageArticle(@Param('id') id: string) {
+    return this.articleService.removeImageArticle(id);
   }
 }
