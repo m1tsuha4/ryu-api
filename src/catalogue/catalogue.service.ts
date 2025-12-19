@@ -16,6 +16,11 @@ export class CatalogueService {
       throw new BadRequestException('Catalogue PDF file is required');
     }
 
+    const existingCatalogue = await this.prisma.catalogue.findFirst();
+    if (existingCatalogue) {
+      return this.update(existingCatalogue.id, createCatalogueDto, file);
+    }
+
     return this.prisma.catalogue.create({
       data: {
         title: createCatalogueDto.title,
@@ -25,7 +30,7 @@ export class CatalogueService {
   }
 
   async findAll() {
-    const existingCatalogues = this.prisma.catalogue.findMany({
+    const existingCatalogues = this.prisma.catalogue.findFirst({
       select: {
         id: true,
         title: true,

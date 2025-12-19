@@ -23,7 +23,6 @@ async function bootstrap() {
     prefix: '/uploads/',
   });
 
-
   const config = new DocumentBuilder()
     .setTitle('Ryu API')
     .setDescription('Ryu API documentation')

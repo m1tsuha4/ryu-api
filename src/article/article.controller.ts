@@ -32,21 +32,44 @@ export class ArticleController {
     schema: {
       type: 'object',
       properties: {
-        title: { type: 'string', example: 'Power Tools Andal untuk Pekerjaan dan Kebutuhan Sehari-hari - RYU'},
-        excerpt: { type: 'string', example: 'Power Tools Andal untuk Pekerjaan dan Kebutuhan Sehari-hari - RYU' },
-        contentHtml: { type: 'string', example: '<p>Power Tools Andal untuk Pekerjaan dan Kebutuhan Sehari-hari - RYU</p>' },
+        title: {
+          type: 'string',
+          example:
+            'Power Tools Andal untuk Pekerjaan dan Kebutuhan Sehari-hari - RYU',
+        },
+        excerpt: {
+          type: 'string',
+          example:
+            'Power Tools Andal untuk Pekerjaan dan Kebutuhan Sehari-hari - RYU',
+        },
+        contentHtml: {
+          type: 'string',
+          example:
+            '<p>Power Tools Andal untuk Pekerjaan dan Kebutuhan Sehari-hari - RYU</p>',
+        },
         file: {
           type: 'string',
           format: 'binary',
         },
-        seoTitle: { type: 'string', example: 'Power Tools Andal untuk Pekerjaan dan Kebutuhan Sehari-hari - RYU' },
-        seoDescription: { type: 'string', example: 'Power Tools Andal untuk Pekerjaan dan Kebutuhan Sehari-hari - RYU' },
-        metaTags: { type: 'object', example: 
-          {
-            title: 'Power Tools Andal untuk Pekerjaan dan Kebutuhan Sehari-hari - RYU',
-            description: 'Power Tools Andal untuk Pekerjaan dan Kebutuhan Sehari-hari - RYU',
-            keywords: 'Power Tools'
-          }
+        seoTitle: {
+          type: 'string',
+          example:
+            'Power Tools Andal untuk Pekerjaan dan Kebutuhan Sehari-hari - RYU',
+        },
+        seoDescription: {
+          type: 'string',
+          example:
+            'Power Tools Andal untuk Pekerjaan dan Kebutuhan Sehari-hari - RYU',
+        },
+        metaTags: {
+          type: 'object',
+          example: {
+            title:
+              'Power Tools Andal untuk Pekerjaan dan Kebutuhan Sehari-hari - RYU',
+            description:
+              'Power Tools Andal untuk Pekerjaan dan Kebutuhan Sehari-hari - RYU',
+            keywords: 'Power Tools',
+          },
         },
         author: { type: 'string', example: 'RYU' },
         status: { type: 'string', example: 'PUBLISHED' },

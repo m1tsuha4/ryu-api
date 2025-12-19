@@ -182,7 +182,10 @@ export class ArticleService {
     }
 
     const uploadRoot = join(process.cwd(), 'uploads');
-    if (existingArticle.primaryImage && existingArticle.primaryImage.length > 0) {
+    if (
+      existingArticle.primaryImage &&
+      existingArticle.primaryImage.length > 0
+    ) {
       const filename = basename(existingArticle.primaryImage);
       const filePath = join(uploadRoot, 'article', filename);
       try {
