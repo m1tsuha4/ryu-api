@@ -163,6 +163,28 @@ export class ProductService {
         id,
         deletedAt: null,
       },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        description: true,
+        storeUrl: true,
+        productCategory: {
+          select: {
+            categoryId: true,
+            category: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+        productImages: {
+          select: {
+            url: true,
+          },
+        },
+      },
     });
     if (!product) {
       throw new BadRequestException('Product not found');
