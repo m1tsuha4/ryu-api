@@ -5,7 +5,7 @@ export const CreateProductSchema = z.object({
   name: z.string().min(1).max(255),
   slug: z.string().min(1).max(255).optional(),
   description: z.string().max(1000),
-  storeUrl: z.string().url(),
+  storeUrl: z.string().url().optional(),
   categoryIds: z
     .preprocess((val) => {
       if (Array.isArray(val)) return val;
