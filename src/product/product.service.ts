@@ -5,10 +5,15 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import slugify from 'slugify';
 import { basename, join } from 'path';
 import { existsSync, unlinkSync } from 'fs';
+import { CategoryService } from 'src/category/category.service';
+import { CategoryPath, findCategoryPath } from 'src/category/util';
+import { boolean } from 'zod/v4';
 
 @Injectable()
 export class ProductService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService,
+    private readonly categoryService: CategoryService
+  ) {}
   async create(
     createProductDto: CreateProductDto,
     files?: Express.Multer.File[],
@@ -171,10 +176,11 @@ export class ProductService {
         storeUrl: true,
         productCategory: {
           select: {
-            categoryId: true,
             category: {
               select: {
+                id: true,
                 name: true,
+                slug: true,
               },
             },
           },
@@ -189,7 +195,24 @@ export class ProductService {
     if (!product) {
       throw new BadRequestException('Product not found');
     }
-    return product;
+
+    const categoryTree = await this.categoryService.getCategoryTree();
+    
+    const categories = product.productCategory
+    .map((pc) =>
+      findCategoryPath(categoryTree, pc.category.id),
+    )
+    .filter(Boolean);
+
+  return {
+    id: product.id,
+    name: product.name,
+    slug: product.slug,
+    description: product.description,
+    storeUrl: product.storeUrl,
+    images: product.productImages,
+    categories,
+  };
   }
 
   async findOneBySlug(slug: string) {
