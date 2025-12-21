@@ -25,7 +25,7 @@ export interface CategoryPath {
   id: string;
   name: string;
   slug: string;
-};
+}
 
 export function findCategoryPath(
   nodes: any[],
@@ -33,11 +33,14 @@ export function findCategoryPath(
   path: CategoryPath[] = [],
 ): CategoryPath[] | null {
   for (const node of nodes) {
-    const newPath = [...path, {
-      id: node.id,
-      name: node.name,
-      slug: node.slug,
-    }];
+    const newPath = [
+      ...path,
+      {
+        id: node.id,
+        name: node.name,
+        slug: node.slug,
+      },
+    ];
 
     if (node.id === targetId) {
       return newPath;

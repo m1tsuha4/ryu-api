@@ -11,8 +11,9 @@ import { boolean } from 'zod/v4';
 
 @Injectable()
 export class ProductService {
-  constructor(private readonly prisma: PrismaService,
-    private readonly categoryService: CategoryService
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly categoryService: CategoryService,
   ) {}
   async create(
     createProductDto: CreateProductDto,
@@ -197,22 +198,20 @@ export class ProductService {
     }
 
     const categoryTree = await this.categoryService.getCategoryTree();
-    
-    const categories = product.productCategory
-    .map((pc) =>
-      findCategoryPath(categoryTree, pc.category.id),
-    )
-    .filter(Boolean);
 
-  return {
-    id: product.id,
-    name: product.name,
-    slug: product.slug,
-    description: product.description,
-    storeUrl: product.storeUrl,
-    images: product.productImages,
-    categories,
-  };
+    const categories = product.productCategory
+      .map((pc) => findCategoryPath(categoryTree, pc.category.id))
+      .filter(Boolean);
+
+    return {
+      id: product.id,
+      name: product.name,
+      slug: product.slug,
+      description: product.description,
+      storeUrl: product.storeUrl,
+      images: product.productImages,
+      categories,
+    };
   }
 
   async findOneBySlug(slug: string) {
