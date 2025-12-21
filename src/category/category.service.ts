@@ -5,7 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import slugify from 'slugify';
 import { join, basename } from 'path';
 import { existsSync, unlinkSync } from 'fs';
-import { CategoryNode } from './util';
+import { CategoryNode, findNodeById } from './util';
 
 @Injectable()
 export class CategoryService {
@@ -50,9 +50,7 @@ export class CategoryService {
 
   async getCategoryTree() {
     const categories = await this.prisma.category.findMany({
-      where: {
-        deletedAt: null,
-      },
+      where: { deletedAt: null },
       select: {
         id: true,
         name: true,
@@ -63,18 +61,49 @@ export class CategoryService {
       },
     });
 
+    const productCategories = await this.prisma.productCategory.findMany({
+      where: {
+        product: { deletedAt: null },
+      },
+      select: { categoryId: true },
+    });
+
+    const productCountMap: Record<string, number> = {};
+    for (const pc of productCategories) {
+      productCountMap[pc.categoryId] =
+        (productCountMap[pc.categoryId] || 0) + 1;
+    }
+
     const map: Record<string, CategoryNode> = {};
     const tree: CategoryNode[] = [];
 
     for (const cat of categories) {
-      map[cat.id] = { ...cat, children: [] };
+      map[cat.id] = {
+        ...cat,
+        children: [],
+        productCount: productCountMap[cat.id] || 0,
+      };
     }
+
     for (const cat of categories) {
       if (cat.parentId && map[cat.parentId]) {
         map[cat.parentId].children.push(map[cat.id]);
       } else {
         tree.push(map[cat.id]);
       }
+    }
+
+    function aggregateCount(node: CategoryNode): number {
+      let total = node.productCount || 0;
+      for (const child of node.children) {
+        total += aggregateCount(child);
+      }
+      node.productCount = total;
+      return total;
+    }
+
+    for (const root of tree) {
+      aggregateCount(root);
     }
 
     return tree;
@@ -115,24 +144,12 @@ export class CategoryService {
   }
 
   async findOne(id: string) {
-    const categoryExist = await this.prisma.category.findUnique({
-      where: {
-        id,
-        deletedAt: null,
-      },
-      select: {
-        id: true,
-        name: true,
-        slug: true,
-        description: true,
-        parentId: true,
-        imageUrl: true,
-      },
-    });
-    if (!categoryExist) {
+    const tree = await this.getCategoryTree();
+    const category = findNodeById(tree, id);
+    if (!category) {
       throw new BadRequestException('Category not found');
     }
-    return categoryExist;
+    return category;
   }
 
   async update(
