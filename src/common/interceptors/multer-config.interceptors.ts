@@ -75,7 +75,7 @@ export function UploadImagesInterceptor(folderName: string, maxCount = 3) {
 
 export function UploadPdfInterceptor(
   folderName: string = 'pdfs',
-  maxSizeBytes = 10 * 1024 * 1024,
+  maxSizeBytes = 50 * 1024 * 1024,
 ) {
   const folderPath = `./uploads/${folderName}`;
   ensureDirExists(folderPath);
