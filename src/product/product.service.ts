@@ -14,7 +14,7 @@ export class ProductService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly categoryService: CategoryService,
-  ) {}
+  ) { }
   async create(
     createProductDto: CreateProductDto,
     files?: Express.Multer.File[],
@@ -272,6 +272,56 @@ export class ProductService {
     const category = await this.prisma.category.findFirst({
       where: {
         id: categoryId,
+        deletedAt: null,
+      },
+    });
+
+    if (!category) {
+      throw new BadRequestException('Category not found');
+    }
+
+    const ids = await this.getCategoryAndChildrenIds(category.id);
+
+    return this.prisma.product.findMany({
+      where: {
+        deletedAt: null,
+        productCategory: {
+          some: {
+            categoryId: {
+              in: ids,
+            },
+          },
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        description: true,
+        storeUrl: true,
+        productCategory: {
+          select: {
+            categoryId: true,
+            category: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+        productImages: {
+          select: {
+            url: true,
+          },
+        },
+      },
+    });
+  }
+
+  async getProductByCategorySlug(slug: string) {
+    const category = await this.prisma.category.findFirst({
+      where: {
+        slug,
         deletedAt: null,
       },
     });

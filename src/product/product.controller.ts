@@ -26,7 +26,7 @@ import { file } from 'zod/v4';
 
 @Controller('product')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(private readonly productService: ProductService) { }
 
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
@@ -76,6 +76,11 @@ export class ProductController {
   @Get('category/:categoryId')
   findByCategory(@Param('categoryId') categoryId: string) {
     return this.productService.getProductByCategoryId(categoryId);
+  }
+
+  @Get('category-slug/:slug')
+  findBySlug(@Param('slug') slug: string) {
+    return this.productService.getProductByCategorySlug(slug);
   }
 
   @Get('search/:query')
