@@ -123,6 +123,51 @@ export class CategoryService {
     });
   }
 
+  async getCategoryBySlugWithChildren(slug: string) {
+    const category = await this.prisma.category.findUnique({
+      where: { slug, deletedAt: null },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        description: true,
+        imageUrl: true,
+      },
+    });
+
+    if (!category) {
+      throw new BadRequestException('Category not found');
+    }
+
+    const children = await this.prisma.category.findMany({
+      where: { parentId: category.id, deletedAt: null },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        description: true,
+        imageUrl: true,
+        _count: {
+          select: {
+            productCateogry: { where: { product: { deletedAt: null } } },
+          },
+        },
+      },
+    });
+
+    return {
+      category,
+      children: children.map((child) => ({
+        id: child.id,
+        name: child.name,
+        slug: child.slug,
+        description: child.description,
+        imageUrl: child.imageUrl,
+        productCount: child._count.productCateogry,
+      })),
+    };
+  }
+
   async findAll() {
     const categoryExists = await this.prisma.category.findMany({
       where: {
