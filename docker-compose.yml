@@ -1,42 +1,17 @@
+version: '3.9'
+
 services:
   app:
+    container_name: ryu-api
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        DATABASE_URL: ${DATABASE_URL}
     ports:
-      - "3000:3000"
-    environment:
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/ryu?schema=public
-      - PORT=3000
-      - JWT_SECRET=${JWT_SECRET:-supersecretkey}
-    depends_on:
-      db:
-        condition: service_healthy
-    restart: always
-    networks:
-      - tekiro-network
-
-  db:
-    image: postgres:15-alpine
-    restart: always
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=ryu
+      - "3007:3000"
+    env_file:
+      - .env
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - tekiro-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
-volumes:  
-  postgres_data:
-
-networks:
-  tekiro-network:
+      - ./uploads:/usr/src/app/uploads
+    restart: unless-stopped
