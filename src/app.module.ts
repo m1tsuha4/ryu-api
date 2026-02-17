@@ -12,12 +12,30 @@ import { ProductModule } from './product/product.module';
 import { CatalogueModule } from './catalogue/catalogue.module';
 import { ServiceCenterModule } from './service-center/service-center.module';
 import { ArticleModule } from './article/article.module';
+import { ContactModule } from './contact/contact.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: [`.env.${process.env.NODE_ENV || 'development'}`, '.env'],
+    }),
+    MailerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        transport: {
+          host: 'smtp.gmail.com',
+          port: 587,
+          secure: false,
+          auth: {
+            user: config.get('SMTP_USER'),
+            pass: config.get('SMTP_PASS'),
+          },
+        },
+      }),
     }),
     PrismaModule,
     UserModule,
@@ -27,6 +45,7 @@ import { ArticleModule } from './article/article.module';
     CatalogueModule,
     ServiceCenterModule,
     ArticleModule,
+    ContactModule,
   ],
   controllers: [AppController],
   providers: [
@@ -37,4 +56,4 @@ import { ArticleModule } from './article/article.module';
     AppService,
   ],
 })
-export class AppModule {}
+export class AppModule { }
