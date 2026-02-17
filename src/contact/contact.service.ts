@@ -8,11 +8,10 @@ export class ContactService {
     constructor(private readonly mailerService: MailerService) { }
 
     async sendContactUsEmail(dto: ContactUsDto): Promise<void> {
-        try {
-            await this.mailerService.sendMail({
-                to: 'ryupowertools.indonesia@gmail.com',
-                subject: `Contact Us: ${dto.contact_type} - ${dto.name}`,
-                html: `
+        this.mailerService.sendMail({
+            to: 'ryupowertools.indonesia@gmail.com',
+            subject: `Contact Us: ${dto.contact_type} - ${dto.name}`,
+            html: `
           <h3>New Contact Us Inquiry</h3>
           <p><strong>Contact Type:</strong> ${dto.contact_type}</p>
           <p><strong>Name:</strong> ${dto.name}</p>
@@ -22,19 +21,16 @@ export class ContactService {
           <p><strong>Message:</strong></p>
           <p>${dto.message}</p>
         `,
-            });
-        } catch (error) {
+        }).catch((error) => {
             console.error('Error sending contact us email:', error);
-            throw new InternalServerErrorException('Failed to send email');
-        }
+        });
     }
 
     async sendContactUsEventEmail(dto: ContactEventDto): Promise<void> {
-        try {
-            await this.mailerService.sendMail({
-                to: 'ryupowertools.indonesia@gmail.com',
-                subject: `Contact Event: ${dto.event_type} - ${dto.name}`,
-                html: `
+        this.mailerService.sendMail({
+            to: 'ryupowertools.indonesia@gmail.com',
+            subject: `Contact Event: ${dto.event_type} - ${dto.name}`,
+            html: `
           <h3>New Contact Event Inquiry</h3>
           <p><strong>Event Type:</strong> ${dto.event_type}</p>
           <p><strong>Name:</strong> ${dto.name}</p>
@@ -44,10 +40,9 @@ export class ContactService {
           <p><strong>Message:</strong></p>
           <p>${dto.message}</p>
         `,
-            });
-        } catch (error) {
+        }).catch((error) => {
             console.error('Error sending contact event email:', error);
-            throw new InternalServerErrorException('Failed to send email');
-        }
+        });
     }
 }
+
