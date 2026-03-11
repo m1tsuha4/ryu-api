@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   Req,
   UnauthorizedException,
@@ -50,5 +51,19 @@ export class AuthController {
       throw new UnauthorizedException('No token provided');
     }
     return this.authService.logout(user.id, token);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Get('validate-token')
+  @ApiOkResponse({
+    description: 'Validate token successfully',
+    type: ResponseLoginDto,
+  })
+  async validateToken(@User() user) {
+    return {
+      valid: true,
+      user,
+    };
   }
 }
