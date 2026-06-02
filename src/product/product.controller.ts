@@ -26,7 +26,7 @@ import { file } from 'zod/v4';
 
 @Controller('product')
 export class ProductController {
-  constructor(private readonly productService: ProductService) { }
+  constructor(private readonly productService: ProductService) {}
 
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()

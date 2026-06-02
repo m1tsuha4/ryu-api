@@ -15,6 +15,7 @@ import { ArticleModule } from './article/article.module';
 import { ContactModule } from './contact/contact.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
+import { InsagramModule } from './insagram/insagram.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { ConfigService } from '@nestjs/config';
     ServiceCenterModule,
     ArticleModule,
     ContactModule,
+    InsagramModule,
   ],
   controllers: [AppController],
   providers: [
@@ -56,4 +58,4 @@ import { ConfigService } from '@nestjs/config';
     AppService,
   ],
 })
-export class AppModule { }
+export class AppModule {}

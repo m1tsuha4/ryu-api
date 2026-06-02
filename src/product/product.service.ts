@@ -14,7 +14,7 @@ export class ProductService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly categoryService: CategoryService,
-  ) { }
+  ) {}
   async create(
     createProductDto: CreateProductDto,
     files?: Express.Multer.File[],
