@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   UploadedFile,
+  Query,
 } from '@nestjs/common';
 import { ArticleService } from './article.service';
 import {
@@ -16,7 +17,7 @@ import {
 } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { JwtAuthGuard } from 'src/auth/guard/jwt-guard.auth';
-import { ApiBearerAuth, ApiBody, ApiConsumes } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiQuery } from '@nestjs/swagger';
 import { ZodValidationPipe } from 'src/common/pipes/zod-validation.pipe';
 import { UploadImageInterceptor } from 'src/common/interceptors/multer-config.interceptors';
 
@@ -89,6 +90,14 @@ export class ArticleController {
   @Get()
   findAll() {
     return this.articleService.findAll();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Get('admin')
+  @ApiQuery({ name: 'status', required: false, enum: ['PUBLISHED', 'DRAFT', 'ARCHIVED', 'ALL'] })
+  findAllAdmin(@Query('status') status?: string) {
+    return this.articleService.findAllAdmin(status);
   }
 
   @Get('image-article')

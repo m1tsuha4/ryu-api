@@ -65,6 +65,23 @@ export class ArticleService {
     });
   }
 
+  async findAllAdmin(status?: string) {
+    const where: any = {
+      deletedAt: null,
+    };
+
+    if (status && status !== 'ALL') {
+      where.status = status;
+    }
+
+    return await this.prisma.article.findMany({
+      where,
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  }
+
   async findOneBySlug(slug: string) {
     const article = await this.prisma.article.findUnique({
       where: {
